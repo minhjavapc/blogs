@@ -22,28 +22,29 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityWebFilterChain securitygWebFilterChain(ServerHttpSecurity http) {
-        http.httpBasic(httpBasic -> httpBasic.disable())
+        http
+                .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .csrf(csrf -> csrf.disable())
                 .logout(logout -> logout.disable())
-                ;
 
-         http
-                .exceptionHandling(exceptionHandlingSpec -> {
-                    exceptionHandlingSpec.authenticationEntryPoint((swe, e) ->
-                            Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED))
-                    ).accessDeniedHandler((swe, e) ->
-                            Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN))
-                    );
-                })
+        ;
+
+        http
+                .exceptionHandling(exceptionHandlingSpec ->
+                        exceptionHandlingSpec.authenticationEntryPoint((swe, e) ->
+                        Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED))
+                ).accessDeniedHandler((swe, e) ->
+                        Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN))
+                ))
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
-                .authorizeExchange(authorizeExchangeSpec -> {
-                    authorizeExchangeSpec.pathMatchers(HttpMethod.OPTIONS).permitAll()
-                            .pathMatchers("/login").permitAll()
-                            .anyExchange().authenticated();
-                })
-         ;
+                .authorizeExchange(authorizeExchangeSpec ->
+                        authorizeExchangeSpec.pathMatchers(HttpMethod.OPTIONS).permitAll()
+                        .pathMatchers("/login").permitAll()
+                        .pathMatchers("/**").permitAll()
+                        .anyExchange().authenticated())
+        ;
 
         return http.build();
     }

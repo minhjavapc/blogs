@@ -23,7 +23,7 @@ public class UserService {
         data.put("user", new AppUser("user", "31+l0BSLwH50RGNTlXO1/OFFCDj28WgBr3WCk8v2Q/Y=", true, Arrays.asList(Role.ROLE_USER)));
 
         //username:passwowrd -> admin:admin
-        data.put("admin", new AppUser("admin", "31+l0BSLwH50RGNTlXO1/OFFCDj28WgBr3WCk8v2Q/Y=", true, Arrays.asList(Role.ROLE_ADMIN)));
+        data.put("admin", new AppUser("admin", "+f4i1iURW6nUyGK60vfJaWYTWHUi4S88Ef2szj3N16U=", true, Arrays.asList(Role.ROLE_ADMIN)));
     }
 
     public Mono<AppUser> findByUsername(String username) {
